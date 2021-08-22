@@ -1,0 +1,32 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  release:
+    types: [published, edited]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create release tag for master branch
+      if: ${{ github.ref == "refs/heads/master" }}
+      env:
+        RELEASE: latest
+    - name: Create release tag for PR branch
+      if: ${{ github.ref == "refs/heads/master" }}
+      env:
+        RELEASE: dev
+    - name: Create release tag for github tag
+      if: ${{ startsWith(github.ref, "refs/tags/") }}
+      env:
+        RELEASE: $(echo $GITHUB_REF | sed "s/refs\/tag\/\(.*\)/\1/")
+    - name: Build the Docker image
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
