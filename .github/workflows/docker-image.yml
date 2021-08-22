@@ -15,16 +15,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
     - name: Create release tag for master branch
+      uses: actions/checkout@v2
       if: ${{ github.ref == "refs/heads/master" }}
       env:
         RELEASE: latest
     - name: Create release tag for PR branch
+      uses: actions/checkout@v2
       if: ${{ github.ref == "refs/heads/master" }}
       env:
         RELEASE: dev
     - name: Create release tag for github tag
+      uses: actions/checkout@v2
       if: ${{ startsWith(github.ref, "refs/tags/") }}
       env:
         RELEASE: $(echo $GITHUB_REF | sed "s/refs\/tag\/\(.*\)/\1/")
