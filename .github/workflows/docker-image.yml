@@ -17,12 +17,12 @@ jobs:
     steps:
     - name: Create release tag for PR branch
       uses: actions/checkout@v2
-      if: ${{ github.ref == 'refs/heads/' }}
+      if: ${{ startsWith(github.ref, 'refs/heads/') }}
       env:
         RELEASE: dev
     - name: Create release tag for master branch
       uses: actions/checkout@v2
-      if: ${{ startsWith(github.ref, 'refs/heads/master') }}
+      if: ${{ github.ref == 'refs/heads/master' }}
       env:
         RELEASE: latest
     - name: Create release tag for github tag
