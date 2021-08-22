@@ -16,25 +16,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Echo github.ref
-      run: echo $REF && echo $BASE_REF
-      env:
-        REF: ${{ github.ref }}
-        BASE_REF: ${{ github.base_ref }}
-    - name: Create release tag for PR branch
+    - name: Build the docker image for PR branch
       if: ${{ startsWith(github.ref, 'refs/pull/') }}
-      run: export RELEASE=dev
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
       env:
         RELEASE: dev
-    - name: Create release tag for master branch
-      uses: actions/checkout@v2
+    - name: Build the docker image for master branch
       if: ${{ github.ref == 'refs/heads/master' }}
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
       env:
         RELEASE: latest
     - name: Create release tag for github tag
-      uses: actions/checkout@v2
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
       env:
         RELEASE: $(echo $GITHUB_REF | sed "s/refs\/tag\/\(.*\)/\1/")
-    - name: Build the Docker image
-      run: echo "$RELEASE" && docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
