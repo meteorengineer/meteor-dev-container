@@ -17,9 +17,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Echo github.ref
-      run: echo $REF
+      run: echo $REF && echo $BASE_REF
       env:
         REF: ${{ github.ref }}
+        BASE_REF: ${{ github.base_ref }}
     - name: Create release tag for PR branch
       uses: actions/checkout@v2
       if: ${{ startsWith(github.ref, 'refs/heads/') }}
