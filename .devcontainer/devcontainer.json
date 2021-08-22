@@ -1,0 +1,24 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+  "name": "Meteor",
+  "build": {
+    "dockerfile": "Dockerfile",
+    // Update 'RELEASE' to pick a Meteor version (for example: latest, 2.3.1 ...)
+    "args": { "RELEASE": "latest" }
+  },
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {},
+
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3000],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "meteor npm install",
+
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "meteor"
+}
