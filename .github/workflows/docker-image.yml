@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Echo github.ref
+      run: echo $REF
+      env:
+        REF: ${{ github.ref }}
     - name: Create release tag for PR branch
       uses: actions/checkout@v2
       if: ${{ startsWith(github.ref, 'refs/heads/') }}
