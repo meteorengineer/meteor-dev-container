@@ -24,6 +24,7 @@ jobs:
     - name: Create release tag for PR branch
       uses: actions/checkout@v2
       if: ${{ startsWith(github.ref, 'refs/pull/') }}
+      run: export RELEASE=dev
       env:
         RELEASE: dev
     - name: Create release tag for master branch
