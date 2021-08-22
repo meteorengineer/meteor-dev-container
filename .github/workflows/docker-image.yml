@@ -37,4 +37,4 @@ jobs:
       env:
         RELEASE: $(echo $GITHUB_REF | sed "s/refs\/tag\/\(.*\)/\1/")
     - name: Build the Docker image
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
+      run: echo "RELEASE" && docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
