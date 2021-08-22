@@ -17,7 +17,7 @@ jobs:
     steps:
     - name: Create release tag for PR branch
       uses: actions/checkout@v2
-      if: ${{ github.ref == 'refs/heads/master' }}
+      if: ${{ github.ref == 'refs/heads/' }}
       env:
         RELEASE: dev
     - name: Create release tag for master branch
