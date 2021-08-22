@@ -18,12 +18,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the docker image for PR branch
       if: ${{ startsWith(github.ref, 'refs/pull/') }}
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE=latest --tag "meteorengineer/meteor-devcontainer:$RELEASE"
       env:
         RELEASE: dev
     - name: Build the docker image for master branch
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE=latest --tag "meteorengineer/meteor-devcontainer:$RELEASE"
       env:
         RELEASE: latest
     - name: Create release tag for github tag
