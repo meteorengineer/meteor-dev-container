@@ -19,16 +19,25 @@ jobs:
     - name: Create image tag for PR branch
       id: branch_vars
       if: ${{ startsWith(github.ref, 'refs/pull/') }}
-      run: echo ::set-output name=image_tag::"dev"
+      run: |
+        echo ::set-output name=image_tag::"dev"
+        echo ::set-output name=meteor_release::"latest"
     - name: Create image tag for master branch
       id: master_vars
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: echo ::set-output name=image_tag::"latest"
+      run: |
+        echo ::set-output name=image_tag::"latest"
+        echo ::set-output name=meteor_release="latest"
     - name: Create image tag for github release
       id: release_vars
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
-      run: echo ::set-output name=image_tag::"$(echo $GITHUB_REF | sed \"s/refs\/tag\/\(.*\)/\1/\")"
-    - name: Build docker image
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
+      run: |
+        echo ::set-output name=image_tag::"$VERSION"
+        echo ::set-output name=meteor_release::"$VERSION"
       env:
-        RELEASE: ${{ steps.branch_vars.outputs.image_tag || steps.master_vars.outputs.image_tag || steps.release_vars.outputs.image_tag }}
+        VERSION: $(echo $GITHUB_REF | sed \"s/refs\/tag\/\(.*\)/\1/\")
+    - name: Build docker image
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$METEOR_VERSION" --tag "meteorengineer/meteor-devcontainer:$IMAGE_TAG"
+      env:
+        IMAGE_TAG: ${{ steps.branch_vars.outputs.image_tag || steps.master_vars.outputs.image_tag || steps.release_vars.outputs.image_tag }}
+        METEOR_VERSION: ${{ steps.branch_vars.outputs.meteor_version || steps.master_vars.outputs.meteor_version || steps.release_vars.outputs.meteor_version }}
