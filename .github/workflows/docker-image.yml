@@ -27,40 +27,27 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Set vars for PR branch
+    - name: Set env for PR branch
       id: branch_vars
       if: ${{ startsWith(github.ref, 'refs/pull/') }}
       run: |
-        echo ::set-output name=image_tag::"dev"
-        echo ::set-output name=meteor_release::"latest"
-    - name: Set vars for master branch
+        echo "image_tag=dev" >> $GITHUB_ENV
+        echo "meteor_release=latest" >> $GITHUB_ENV
+    - name: Set env for master branch
       id: master_vars
       if: ${{ github.ref == 'refs/heads/master' }}
       run: |
-        echo ::set-output name=image_tag::"latest"
-        echo ::set-output name=meteor_release::"latest"
-    - name: Set vars for github release
+        echo "image_tag=latest" >> $GITHUB_ENV
+        echo "meteor_release=latest" >> $GITHUB_ENV
+    - name: Set env for github release
       id: release_vars
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
       run: |
-        echo ::set-output name=image_tag::"$VERSION"
-        echo ::set-output name=meteor_release::"$VERSION"
+        echo "image_tag=$VERSION" >> $GITHUB_ENV
+        echo "meteor_release=$VERSION" >> $GITHUB_ENV
       env:
         VERSION: $(echo $GITHUB_REF | sed \"s/refs\/tags\/v\(.*\)/\1/\")
-    - name: Set vars for next steps
-      id: vars
-      run: |
-        echo ::set-output name=image_tag::"$IMAGE_TAG"
-        echo ::set-output name=meteor_release::"$METEOR_RELEASE"
-      env:
-        IMAGE_TAG: ${{ steps.branch_vars.outputs.image_tag || steps.master_vars.outputs.image_tag || steps.release_vars.outputs.image_tag }}
-        METEOR_RELEASE: ${{ steps.branch_vars.outputs.meteor_release || steps.master_vars.outputs.meteor_release || steps.release_vars.outputs.meteor_release }}
     - name: Build docker image
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$METEOR_RELEASE" --tag "meteorengineer/meteor-devcontainer:$IMAGE_TAG"
-      env:
-        IMAGE_TAG: ${{ steps.vars.outputs.image_tag }}
-        METEOR_RELEASE: ${{ steps.vars.outputs.meteor_release }}
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="${{ env.meteor_release }}" --tag "meteorengineer/meteor-devcontainer:${{ env.image_tag }}"
     - name: Push docker image
-      run: docker push "meteorengineer/meteor-devcontainer:$IMAGE_TAG"
-      env:
-        IMAGE_TAG: ${{ steps.vars.outputs.image_tag }}
+      run: docker push "meteorengineer/meteor-devcontainer:${{ env.image_tag }}"
