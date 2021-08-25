@@ -37,7 +37,7 @@ jobs:
       env:
         VERSION: $(echo $GITHUB_REF | sed \"s/refs\/tag\/\(.*\)/\1/\")
     - name: Build docker image
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$METEOR_VERSION" --tag "meteorengineer/meteor-devcontainer:$IMAGE_TAG"
+      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$METEOR_RELEASE" --tag "meteorengineer/meteor-devcontainer:$IMAGE_TAG"
       env:
         IMAGE_TAG: ${{ steps.branch_vars.outputs.image_tag || steps.master_vars.outputs.image_tag || steps.release_vars.outputs.image_tag }}
-        METEOR_VERSION: ${{ steps.branch_vars.outputs.meteor_version || steps.master_vars.outputs.meteor_version || steps.release_vars.outputs.meteor_version }}
+        METEOR_RELEASE: ${{ steps.branch_vars.outputs.meteor_release || steps.master_vars.outputs.meteor_release || steps.release_vars.outputs.meteor_release }}
