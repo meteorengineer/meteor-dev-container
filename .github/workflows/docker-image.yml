@@ -40,7 +40,7 @@ jobs:
         echo ::set-output name=image_tag::"$VERSION"
         echo ::set-output name=meteor_release::"$VERSION"
       env:
-        VERSION: $(echo $GITHUB_REF | sed \"s/refs\/tag\/\(.*\)/\1/\")
+        VERSION: $(echo $GITHUB_REF | sed \"s/refs\/tags\/v\(.*\)/\1/\")
     - name: Set vars for next steps
       id: vars
       run: |
