@@ -8,9 +8,6 @@ on:
       - .devcontainer/Dockerfile
   pull_request:
     branches: [master]
-    paths:
-      - .devcontainer/base.Dockerfile
-      - .devcontainer/Dockerfile
   release:
     types: [published, edited]
 
