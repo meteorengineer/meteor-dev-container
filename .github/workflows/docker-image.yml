@@ -16,18 +16,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the docker image for PR branch
+    - name: Create image tag for PR branch
       if: ${{ startsWith(github.ref, 'refs/pull/') }}
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE=latest --tag "meteorengineer/meteor-devcontainer:$RELEASE"
-      env:
-        RELEASE: dev
-    - name: Build the docker image for master branch
+      run: echo ::set-output name=image_tag::"dev"
+    - name: Create image tag for master branch
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE=latest --tag "meteorengineer/meteor-devcontainer:$RELEASE"
-      env:
-        RELEASE: latest
-    - name: Create release tag for github tag
+      run: echo ::set-output name=image_tag::"latest"
+    - name: Create image tag for github release
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
+      run: echo ::set-output name=image_tag::"$(echo $GITHUB_REF | sed \"s/refs\/tag\/\(.*\)/\1/\")"
+    - name: Build docker image
       run: docker build .devcontainer --file .devcontainer/base.Dockerfile --build-arg RELEASE="$RELEASE" --tag "meteorengineer/meteor-devcontainer:$RELEASE"
       env:
-        RELEASE: $(echo $GITHUB_REF | sed "s/refs\/tag\/\(.*\)/\1/")
+        RELEASE: ${{ steps.vars.outputs.image_tag }}
