@@ -6,6 +6,14 @@ This devcontainer is based on [geoffreybooth/meteor-base](https://hub.docker.com
 
 ## Usage
 
-Copy `.devcontainer` directory into your repository and create a new GitHub Codespace.
+Copy `.devcontainer` directory into your repository or use following command:
 
-You can use specific Meteor release by changing `build.args.RELEASE` in `devcontainer.json` file. For example: `"args": { "RELEASE": "2.3.5" }`.
+```
+curl https://raw.githubusercontent.com/meteorengineer/meteor-dev-container/master/setup.sh | bash
+```
+
+### Configuration
+
+You can use specific Meteor release by changing `build.args.RELEASE` in `devcontainer.json` file.
+
+For example: `"args": { "RELEASE": "2.3.5" }`.
