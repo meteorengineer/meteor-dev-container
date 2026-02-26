@@ -16,4 +16,4 @@ curl https://raw.githubusercontent.com/meteorengineer/meteor-dev-container/maste
 
 You can use specific Meteor release by changing `build.args.RELEASE` in `devcontainer.json` file.
 
-For example: `"args": { "RELEASE": "2.3.5" }`.
+For example: `"args": { "RELEASE": "3.4.0" }`.
